@@ -1,4 +1,3 @@
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
 import {
   getAuth,
@@ -8,6 +7,7 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
 
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyB3ydz419KcuNRQxdBSTIHfbjgpSK-oOdU",
   authDomain: "esi-2d7b2.firebaseapp.com",
@@ -18,20 +18,23 @@ const firebaseConfig = {
   measurementId: "G-32610QEXWY"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 let confirmationResult;
 
+// Initialize reCAPTCHA verifier
 window.onload = () => {
   window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
     size: "normal",
     callback: () => console.log("reCAPTCHA solved"),
-    "expired-callback": () => alert("reCAPTCHA expired. Reload."),
+    "expired-callback": () => alert("reCAPTCHA expired. Reload.")
   });
 
   recaptchaVerifier.render();
 
+  // Handle auth state change (login/logout visibility)
   onAuthStateChanged(auth, (user) => {
     const loginBtn = document.getElementById("login-btn");
     const logoutBtn = document.getElementById("logout-btn");
@@ -45,6 +48,7 @@ window.onload = () => {
     }
   });
 
+  // Logout button event
   const logoutBtn = document.getElementById("logout-btn");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
@@ -56,6 +60,7 @@ window.onload = () => {
   }
 };
 
+// Send OTP function
 window.sendOTP = () => {
   const code = document.getElementById("country-code").value;
   const number = document.getElementById("phone-number").value.trim();
@@ -69,6 +74,7 @@ window.sendOTP = () => {
     .catch((error) => alert(error.message));
 };
 
+// Verify OTP function
 window.verifyOTP = () => {
   const code = document.getElementById("otp-code").value;
   confirmationResult.confirm(code)
